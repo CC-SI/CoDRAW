@@ -1,0 +1,22 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: #f0f0f0;
+}
+
+canvas {
+    border: 1px solid #ccc;
+    flex-grow: 1; /* Makes the canvas take up the remaining space */
+    cursor: crosshair;
+}
