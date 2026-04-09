@@ -1,3 +1,4 @@
+/* Estilos base da pagina e da lousa */
 body {
     margin: 0;
     padding: 0;
@@ -17,6 +18,6 @@ body {
 
 canvas {
     border: 1px solid #ccc;
-    flex-grow: 1; /* Makes the canvas take up the remaining space */
+    flex-grow: 1;
     cursor: crosshair;
 }
