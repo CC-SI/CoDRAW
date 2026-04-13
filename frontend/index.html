@@ -3,17 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Drawboard</title>
+    <title>CoDRAW</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Barra de ferramentas de desenho e acoes da lousa -->
     <div class="toolbar" id="toolbar">
+        <label for="tool">Ferramenta:</label>
+        <select id="tool">
+            <option value="select">Selecionar</option>
+            <option value="freehand">Desenho Livre</option>
+            <option value="rectangle">Retangulo</option>
+            <option value="circle">Circulo</option>
+            <option value="triangle">Triangulo</option>
+            <option value="diamond">Losango</option>
+        </select>
+
         <label for="stroke">Cor:</label>
         <input type="color" id="stroke" name="stroke" value="#000000">
+
         <label for="lineWidth">Comprimento da Linha:</label>
         <input type="number" id="lineWidth" name="lineWidth" value="5" min="1" max="50">
+
+        <button id="deleteSelected">Apagar selecionado</button>
         <button id="clear">Limpar</button>
     </div>
+
+    <!-- Area de desenho principal -->
     <canvas id="drawing-board"></canvas>
     <script src="script.js"></script>
 </body>
