@@ -1,14 +1,18 @@
+---
+
 # CoDRAW - Versão Inicial
 
 CoDRAW é uma lousa colaborativa em fase inicial, com backend em FastAPI e frontend estático servido pelo próprio backend.
 
-## Requisitos
+---
+
+## 🛠 Requisitos
 
 - Python 3.10+ (recomendado)
 - pip
 - Terminal (PowerShell, CMD ou similar)
 
-## Instalação
+## 📥 Instalação
 
 1. (Opcional, recomendado) crie e ative um ambiente virtual.
 2. Instale as dependências do projeto:
@@ -17,7 +21,7 @@ CoDRAW é uma lousa colaborativa em fase inicial, com backend em FastAPI e front
 pip install -r requirements.txt
 ```
 
-## Como rodar
+## 🚀 Como rodar
 
 Execute o backend com recarga automática:
 
@@ -27,10 +31,10 @@ py -m uvicorn backend.app.main:app --reload --port 8000
 
 Acesse no navegador:
 
-- App: http://127.0.0.1:8000
-- Healthcheck: http://127.0.0.1:8000/health
+- **App:** [http://127.0.0.1:8000](http://127.0.0.1:8000)
+- **Healthcheck:** [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
 
-## Funcionalidades desta versão
+## ✨ Funcionalidades desta versão
 
 - Desenho livre (freehand)
 - Formas: retângulo, círculo, triângulo e losango
@@ -38,7 +42,7 @@ Acesse no navegador:
 - Apagar elemento selecionado
 - Limpar toda a lousa
 
-## Estrutura do projeto
+## 📂 Estrutura do projeto
 
 - `backend/app/main.py`: inicialização da API e serviço de arquivos estáticos do frontend
 - `backend/app/api/rooms.py`: rotas da lousa (criar, listar, remover e limpar)
@@ -48,7 +52,7 @@ Acesse no navegador:
 - `frontend/script.js`: lógica de desenho, seleção e integração com API
 - `frontend/style.css`: estilos da interface
 
-## Observações
+## ⚠️ Observações
 
 - Nesta versão inicial, os dados ficam em memória.
 - Ao reiniciar o servidor, os desenhos são perdidos.
