@@ -1,4 +1,4 @@
-# CoDRAW - Versao Inicial
+# CoDRAW - Versão Inicial
 
 CoDRAW é uma lousa colaborativa em fase inicial, com backend em FastAPI e frontend estático servido pelo próprio backend.
 
@@ -40,7 +40,7 @@ Acesse no navegador:
 
 ## Estrutura do projeto
 
-- `backend/app/main.py`: inicialização da API e serviço de arquivos estticos do frontend
+- `backend/app/main.py`: inicialização da API e serviço de arquivos estáticos do frontend
 - `backend/app/api/rooms.py`: rotas da lousa (criar, listar, remover e limpar)
 - `backend/app/schemas.py`: modelos e validações dos elementos
 - `backend/app/services/board_store.py`: armazenamento em memória por sala
@@ -48,7 +48,7 @@ Acesse no navegador:
 - `frontend/script.js`: lógica de desenho, seleção e integração com API
 - `frontend/style.css`: estilos da interface
 
-## Observacoes
+## Observações
 
-- Nesta versão inicial, os dados ficam em mem´pria.
+- Nesta versão inicial, os dados ficam em memória.
 - Ao reiniciar o servidor, os desenhos são perdidos.
