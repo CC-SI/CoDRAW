@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 # Python cache and bytecode
 __pycache__/
 *.py[cod]
@@ -28,3 +29,9 @@ dist/
 .idea/
 .DS_Store
 Thumbs.db
+=======
+venv/
+__pycache__/
+*.pyc
+.env
+>>>>>>> Stashed changes
