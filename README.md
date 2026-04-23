@@ -1,4 +1,4 @@
-# CoDRAW - Versão Inicial (API em app/)
+﻿# CoDRAW - Versão Inicial (API em app/)
 
 CoDRAW é uma lousa digital colaborativa em fase inicial, com backend em FastAPI e frontend estático servido na raiz da aplicação.
 
@@ -10,7 +10,7 @@ CoDRAW é uma lousa digital colaborativa em fase inicial, com backend em FastAPI
 ## Instalação
 
 1. (Opcional) crie e ative um ambiente virtual.
-2. Instale as dependencias:
+2. Instale as dependências:
 
 ```bash
 pip install -r requirements.txt
@@ -28,15 +28,29 @@ py -m uvicorn app.main:app --reload --port 8000
 
 - App (frontend): http://127.0.0.1:8000
 - Healthcheck: http://127.0.0.1:8000/health
-- Documentacao Swagger: http://127.0.0.1:8000/docs
+- Documentação Swagger: http://127.0.0.1:8000/docs
 
-## Tecnologias utilizadas
+## Tecnologias
 
-- Python
-- FastAPI
-- Uvicorn (ASGI)
-- SQLite
-- HTML, CSS e JavaScript (Canvas API)
+- **Python**  
+- **FastAPI**  
+- **Uvicorn (ASGI)**  
+- **Pydantic**  
+- **CORS Middleware**  
+- **StaticFiles (FastAPI/Starlette)**  
+- **SQLite**  
+- **sqlite3 (biblioteca padrao do Python)**  
+- **HTML5**  
+- **CSS3**  
+- **JavaScript (Vanilla)**  
+- **Canvas 2D (API nativa do navegador)**  
+- **Fetch API**  
+- **Polling (`setInterval`)**  
+
+### Arquitetura atual (resumo)
+- Frontend e backend na mesma origem: `http://127.0.0.1:8000`.
+- Frontend servido pelo backend via `StaticFiles`.
+- Persistência local via SQLite (`app/lousa.db`).
 
 ## Endpoints principais
 
@@ -50,17 +64,17 @@ py -m uvicorn app.main:app --reload --port 8000
 
 Para facilitar os testes de entrada em sala existente, use:
 
-- Código da sala: `sala-teste`
+- Codigo da sala: `sala-teste`
 
 Passos:
 1. Abra `http://127.0.0.1:8000`
-2. Informe `sala-teste` no campo de código da sala
+2. Informe `sala-teste` no campo de codigo da sala
 3. Informe seu nome
 4. Clique em **Entrar na sala**
 
 ## Estrutura
 
-- `app/main.py`: inicializacao da API
+- `app/main.py`: inicialização da API
 - `app/routes.py`: rotas da aplicação
 - `app/database.py`: conexão e schema SQLite
 - `frontend/index.html`: interface
