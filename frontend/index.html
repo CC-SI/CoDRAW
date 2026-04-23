@@ -1,41 +1,4 @@
-<!DOCTYPE html>
-<<<<<<< Updated upstream
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoDRAW</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <!-- Barra de ferramentas de desenho e acoes da lousa -->
-    <div class="toolbar" id="toolbar">
-        <label for="tool">Ferramenta:</label>
-        <select id="tool">
-            <option value="select">Selecionar</option>
-            <option value="freehand">Desenho Livre</option>
-            <option value="rectangle">Retangulo</option>
-            <option value="circle">Circulo</option>
-            <option value="triangle">Triangulo</option>
-            <option value="diamond">Losango</option>
-        </select>
-
-        <label for="stroke">Cor:</label>
-        <input type="color" id="stroke" name="stroke" value="#000000">
-
-        <label for="lineWidth">Comprimento da Linha:</label>
-        <input type="number" id="lineWidth" name="lineWidth" value="5" min="1" max="50">
-
-        <button id="deleteSelected">Apagar selecionado</button>
-        <button id="clear">Limpar</button>
-    </div>
-
-    <!-- Area de desenho principal -->
-    <canvas id="drawing-board"></canvas>
-    <script src="script.js"></script>
-</body>
-</html>
-=======
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -95,20 +58,20 @@
 
       <label>Ferramenta:</label>
       <button id="tool-caneta"  class="btn-tool active" onclick="setFerramenta('caneta')">✏️ Caneta</button>
-      <button id="tool-borracha" class="btn-tool"        onclick="setFerramenta('borracha')">🧹 Borracha</button>
+      <button id="tool-borracha" class="btn-tool" onclick="setFerramenta('borracha')">🧹 Borracha</button>
       <label for="eraserWidth" id="label-borracha" style="display:none">Tam.:</label>
       <input type="number" id="eraserWidth" value="20" min="1" max="100" style="width:56px; display:none;" title="Tamanho da borracha" />
 
       <span class="toolbar-sep"></span>
 
       <label>Forma:</label>
-      <button id="tool-linha"     class="btn-tool" onclick="setFerramenta('linha')">╱ Linha</button>
+      <button id="tool-linha" class="btn-tool" onclick="setFerramenta('linha')">╱ Linha</button>
       <button id="tool-retangulo" class="btn-tool" onclick="setFerramenta('retangulo')">▭ Retângulo</button>
-      <button id="tool-circulo"   class="btn-tool" onclick="setFerramenta('circulo')">○ Círculo</button>
+      <button id="tool-circulo" class="btn-tool" onclick="setFerramenta('circulo')">○ Círculo</button>
       <button id="tool-triangulo" class="btn-tool" onclick="setFerramenta('triangulo')">△ Triângulo</button>
-      <button id="tool-losango"   class="btn-tool" onclick="setFerramenta('losango')">◇ Losango</button>
-      <button id="tool-seta"      class="btn-tool" onclick="setFerramenta('seta')">➜ Seta</button>
-      <button id="tool-estrela"   class="btn-tool" onclick="setFerramenta('estrela')">★ Estrela</button>
+      <button id="tool-losango" class="btn-tool" onclick="setFerramenta('losango')">◇ Losango</button>
+      <button id="tool-seta" class="btn-tool" onclick="setFerramenta('seta')">➜ Seta</button>
+      <button id="tool-estrela" class="btn-tool" onclick="setFerramenta('estrela')">★ Estrela</button>
 
       <span class="toolbar-sep"></span>
 
@@ -140,8 +103,8 @@
   <div id="text-input-box" style="display:none; position:fixed; z-index:50; background:#fff; border:1px solid #ccc; border-radius:8px; padding:10px; box-shadow:0 4px 16px rgba(0,0,0,0.15); flex-direction:column; gap:8px; min-width:220px;">
     <textarea id="text-area" rows="3" placeholder="Digite o texto..." style="resize:both; padding:6px 8px; border:1px solid #ccc; border-radius:5px; font-size:0.95rem; outline:none; font-family:sans-serif; min-width:200px;"></textarea>
     <div style="display:flex; gap:8px;">
-      <button id="btn-confirmar-texto" class="btn-primary"   style="flex:1; padding:6px; font-size:0.85rem;">✓ Confirmar</button>
-      <button id="btn-cancelar-texto"  class="btn-secondary" style="flex:1; padding:6px; font-size:0.85rem;">✕ Cancelar</button>
+      <button id="btn-confirmar-texto" class="btn-primary" style="flex:1; padding:6px; font-size:0.85rem;">✓ Confirmar</button>
+      <button id="btn-cancelar-texto" class="btn-secondary" style="flex:1; padding:6px; font-size:0.85rem;">✕ Cancelar</button>
     </div>
   </div>
 
@@ -149,4 +112,3 @@
   <script src="script.js"></script>
 </body>
 </html>
->>>>>>> Stashed changes

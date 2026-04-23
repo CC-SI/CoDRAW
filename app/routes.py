@@ -1,19 +1,20 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+
 from app.database import get_connection
 
 router = APIRouter()
 
 
-# ─── SCHEMAS ────────────────────────────────────────────────────────────────
-
 class CriarSala(BaseModel):
-    codigo: str      # ex: "turma-a"
-    professor: str   # nome do professor
-    senha: str       # senha para ações administrativas
+    codigo: str
+    professor: str
+    senha: str
+
 
 class EntrarSala(BaseModel):
-    usuario: str     # nome do aluno
+    usuario: str
+
 
 class NovoTraco(BaseModel):
     usuario: str
@@ -23,12 +24,15 @@ class NovoTraco(BaseModel):
     y2: float
     cor: str = "#000000"
     espessura: int = 3
+    ferramenta: str = "caneta"
+    texto: str | None = None
+    font: str | None = None
+    font_size: int | None = None
+
 
 class AcaoProtegida(BaseModel):
-    senha: str       # senha enviada no body, não na URL
+    senha: str
 
-
-# ─── SALAS ──────────────────────────────────────────────────────────────────
 
 @router.post("/salas", summary="Criar uma nova sala")
 def criar_sala(dados: CriarSala):
@@ -39,34 +43,33 @@ def criar_sala(dados: CriarSala):
     try:
         conn.execute(
             "INSERT INTO salas (codigo, professor, senha) VALUES (?, ?, ?)",
-            (dados.codigo, dados.professor, dados.senha)
+            (dados.codigo, dados.professor, dados.senha),
         )
         conn.commit()
         return {
-            "message": "Sala criada com sucesso!",
+            "message": "Sala criada com sucesso.",
             "codigo": dados.codigo,
-            "professor": dados.professor
+            "professor": dados.professor,
         }
     except Exception:
-        raise HTTPException(status_code=400, detail=f"Já existe uma sala com o código '{dados.codigo}'.")
+        raise HTTPException(status_code=400, detail=f"Ja existe uma sala com o codigo '{dados.codigo}'.")
     finally:
         conn.close()
 
 
-@router.get("/salas/{codigo}", summary="Buscar informações de uma sala")
+@router.get("/salas/{codigo}", summary="Buscar informacoes de uma sala")
 def buscar_sala(codigo: str):
     conn = get_connection()
     sala = conn.execute("SELECT * FROM salas WHERE codigo = ?", (codigo,)).fetchone()
     conn.close()
 
     if not sala:
-        raise HTTPException(status_code=404, detail="Sala não encontrada.")
+        raise HTTPException(status_code=404, detail="Sala nao encontrada.")
 
     return {
         "codigo": sala["codigo"],
         "professor": sala["professor"],
-        "criada_em": sala["criada_em"]
-        # senha nunca é retornada
+        "criada_em": sala["criada_em"],
     }
 
 
@@ -80,14 +83,14 @@ def listar_salas():
     return {"salas": [dict(s) for s in salas]}
 
 
-@router.delete("/salas/{codigo}", summary="Deletar sala e todos os traços")
+@router.delete("/salas/{codigo}", summary="Deletar sala e todos os tracos")
 def deletar_sala(codigo: str, dados: AcaoProtegida):
     conn = get_connection()
     sala = conn.execute("SELECT * FROM salas WHERE codigo = ?", (codigo,)).fetchone()
 
     if not sala:
         conn.close()
-        raise HTTPException(status_code=404, detail="Sala não encontrada.")
+        raise HTTPException(status_code=404, detail="Sala nao encontrada.")
     if sala["senha"] != dados.senha:
         conn.close()
         raise HTTPException(status_code=403, detail="Senha incorreta.")
@@ -99,44 +102,56 @@ def deletar_sala(codigo: str, dados: AcaoProtegida):
     return {"message": f"Sala '{codigo}' deletada com sucesso."}
 
 
-# ─── TRAÇOS ─────────────────────────────────────────────────────────────────
-
-@router.post("/salas/{codigo}/tracos", summary="Salvar um traço na lousa")
+@router.post("/salas/{codigo}/tracos", summary="Salvar um traco na lousa")
 def salvar_traco(codigo: str, traco: NovoTraco):
     conn = get_connection()
     sala = conn.execute("SELECT * FROM salas WHERE codigo = ?", (codigo,)).fetchone()
 
     if not sala:
         conn.close()
-        raise HTTPException(status_code=404, detail="Sala não encontrada.")
+        raise HTTPException(status_code=404, detail="Sala nao encontrada.")
 
     cursor = conn.execute(
-        """INSERT INTO tracos (sala_codigo, usuario, x1, y1, x2, y2, cor, espessura)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
-        (codigo, traco.usuario, traco.x1, traco.y1, traco.x2, traco.y2, traco.cor, traco.espessura)
+        """
+        INSERT INTO tracos (
+            sala_codigo, usuario, x1, y1, x2, y2,
+            cor, espessura, ferramenta, texto, font, font_size
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            codigo,
+            traco.usuario,
+            traco.x1,
+            traco.y1,
+            traco.x2,
+            traco.y2,
+            traco.cor,
+            traco.espessura,
+            traco.ferramenta,
+            traco.texto,
+            traco.font,
+            traco.font_size,
+        ),
     )
     conn.commit()
-    ultimo_id = cursor.lastrowid  # corrigido: lastrowid do cursor, não segunda query
+    ultimo_id = cursor.lastrowid
     conn.close()
-    return {"message": "Traço salvo.", "id": ultimo_id}
+    return {"message": "Traco salvo.", "id": ultimo_id}
 
 
-@router.get("/salas/{codigo}/tracos", summary="Buscar todos os traços da sala")
+@router.get("/salas/{codigo}/tracos", summary="Buscar todos os tracos da sala")
 def buscar_tracos(codigo: str, desde_id: int = 0):
-    """
-    Retorna os traços da sala. Use `desde_id` para buscar
-    apenas os traços novos (polling incremental).
-    """
     conn = get_connection()
     sala = conn.execute("SELECT * FROM salas WHERE codigo = ?", (codigo,)).fetchone()
 
     if not sala:
         conn.close()
-        raise HTTPException(status_code=404, detail="Sala não encontrada.")
+        raise HTTPException(status_code=404, detail="Sala nao encontrada.")
 
     tracos = conn.execute(
         "SELECT * FROM tracos WHERE sala_codigo = ? AND id > ? ORDER BY id ASC",
-        (codigo, desde_id)
+        (codigo, desde_id),
     ).fetchall()
     conn.close()
 
@@ -150,7 +165,7 @@ def limpar_lousa(codigo: str, dados: AcaoProtegida):
 
     if not sala:
         conn.close()
-        raise HTTPException(status_code=404, detail="Sala não encontrada.")
+        raise HTTPException(status_code=404, detail="Sala nao encontrada.")
     if sala["senha"] != dados.senha:
         conn.close()
         raise HTTPException(status_code=403, detail="Senha incorreta.")
