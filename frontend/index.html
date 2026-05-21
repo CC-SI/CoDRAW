@@ -1,20 +1,114 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Drawboard</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoDRAW — Lousa Colaborativa</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="toolbar" id="toolbar">
-        <label for="stroke">Cor:</label>
-        <input type="color" id="stroke" name="stroke" value="#000000">
-        <label for="lineWidth">Comprimento da Linha:</label>
-        <input type="number" id="lineWidth" name="lineWidth" value="5" min="1" max="50">
-        <button id="clear">Limpar</button>
+
+  <!-- MODAL DE ENTRADA -->
+  <div id="modal" class="modal-overlay">
+    <div class="modal-box">
+      <h2>✏️ CoDRAW</h2>
+      <p>Lousa digital colaborativa</p>
+
+      <div class="field-group">
+        <label>Código da sala</label>
+        <input type="text" id="inp-sala" placeholder="ex: turma-a" />
+      </div>
+
+      <div class="field-group">
+        <label>Seu nome</label>
+        <input type="text" id="inp-usuario" placeholder="ex: João" />
+      </div>
+
+      <div class="field-group toggle-group">
+        <label>
+          <input type="checkbox" id="toggle-professor" />
+          Sou o professor (criar sala)
+        </label>
+      </div>
+
+      <div class="field-group" id="senha-grupo" style="display:none">
+        <label>Senha da sala</label>
+        <input type="password" id="inp-senha" placeholder="mínimo 4 caracteres" />
+      </div>
+
+      <div id="modal-erro" class="modal-erro"></div>
+
+      <div class="modal-actions">
+        <button id="btn-entrar" class="btn-secondary">Entrar na sala</button>
+        <button id="btn-criar" class="btn-primary">Criar sala</button>
+      </div>
     </div>
-    <canvas id="drawing-board"></canvas>
-    <script src="script.js"></script>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar" id="toolbar">
+    <span id="info-sala" class="info-sala">Conecte-se a uma sala para desenhar</span>
+    <div class="toolbar-controls">
+      <label for="stroke">Cor:</label>
+      <input type="color" id="stroke" value="#000000" />
+      <label for="lineWidth">Espessura:</label>
+      <input type="number" id="lineWidth" value="5" min="1" max="50" />
+
+      <span class="toolbar-sep"></span>
+
+      <label>Ferramenta:</label>
+      <button id="tool-caneta"  class="btn-tool active" onclick="setFerramenta('caneta')">✏️ Caneta</button>
+      <button id="tool-borracha" class="btn-tool" onclick="setFerramenta('borracha')">🧹 Borracha</button>
+      <label for="eraserWidth" id="label-borracha" style="display:none">Tam.:</label>
+      <input type="number" id="eraserWidth" value="20" min="1" max="100" style="width:56px; display:none;" title="Tamanho da borracha" />
+
+      <span class="toolbar-sep"></span>
+
+      <label>Forma:</label>
+      <button id="tool-linha" class="btn-tool" onclick="setFerramenta('linha')">╱ Linha</button>
+      <button id="tool-retangulo" class="btn-tool" onclick="setFerramenta('retangulo')">▭ Retângulo</button>
+      <button id="tool-circulo" class="btn-tool" onclick="setFerramenta('circulo')">○ Círculo</button>
+      <button id="tool-triangulo" class="btn-tool" onclick="setFerramenta('triangulo')">△ Triângulo</button>
+      <button id="tool-losango" class="btn-tool" onclick="setFerramenta('losango')">◇ Losango</button>
+      <button id="tool-seta" class="btn-tool" onclick="setFerramenta('seta')">➜ Seta</button>
+      <button id="tool-estrela" class="btn-tool" onclick="setFerramenta('estrela')">★ Estrela</button>
+
+      <span class="toolbar-sep"></span>
+
+      <label>Texto:</label>
+      <button id="tool-texto" class="btn-tool" onclick="setFerramenta('texto')">T Texto</button>
+      <!-- Controles de fonte — visíveis só com ferramenta texto -->
+      <select id="fontFamily" style="display:none; padding:4px 5px; border:1px solid #ccc; border-radius:5px; font-size:0.82rem;" title="Família da fonte">
+        <option value="sans-serif">Sans</option>
+        <option value="serif">Serif</option>
+        <option value="monospace">Mono</option>
+        <option value="cursive">Cursive</option>
+        <option value="Impact">Impact</option>
+      </select>
+      <input type="number" id="fontSize" value="24" min="8" max="120" style="width:52px; display:none;" title="Tamanho da fonte" />
+      <label id="label-bold" style="display:none; align-items:center; gap:3px; font-size:0.85rem; cursor:pointer; font-weight:700; padding:4px 6px; border:1px solid #ccc; border-radius:5px; background:#fff;">
+        <input type="checkbox" id="toggle-bold" style="margin:0;" /> <b>N</b>
+      </label>
+      <label id="label-italic" style="display:none; align-items:center; gap:3px; font-size:0.85rem; cursor:pointer; padding:4px 6px; border:1px solid #ccc; border-radius:5px; background:#fff;">
+        <input type="checkbox" id="toggle-italic" style="margin:0;" /> <i>I</i>
+      </label>
+
+      <span class="toolbar-sep"></span>
+
+      <button id="clear" style="display:none">🗑️ Limpar lousa</button>
+    </div>
+  </div>
+
+  <!-- INPUT FLUTUANTE DE TEXTO -->
+  <div id="text-input-box" style="display:none; position:fixed; z-index:50; background:#fff; border:1px solid #ccc; border-radius:8px; padding:10px; box-shadow:0 4px 16px rgba(0,0,0,0.15); flex-direction:column; gap:8px; min-width:220px;">
+    <textarea id="text-area" rows="3" placeholder="Digite o texto..." style="resize:both; padding:6px 8px; border:1px solid #ccc; border-radius:5px; font-size:0.95rem; outline:none; font-family:sans-serif; min-width:200px;"></textarea>
+    <div style="display:flex; gap:8px;">
+      <button id="btn-confirmar-texto" class="btn-primary" style="flex:1; padding:6px; font-size:0.85rem;">✓ Confirmar</button>
+      <button id="btn-cancelar-texto" class="btn-secondary" style="flex:1; padding:6px; font-size:0.85rem;">✕ Cancelar</button>
+    </div>
+  </div>
+
+  <canvas id="drawing-board"></canvas>
+  <script src="script.js"></script>
 </body>
 </html>
